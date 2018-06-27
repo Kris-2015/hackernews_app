@@ -5,15 +5,7 @@ import './App.css';
 import Table from './Table';
 import Button from "./Button";
 import Search from './Search';
-
-const DEFAULT_QUERY = 'redux';
-const DEFAULT_HPP = '10';
-
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const PARAM_HPP = 'hitsPerPage=';
+import globalVariable from './constants/index';
 
 const Loading = () =>
     <div><i className="fas fa-spinner"></i></div>;
@@ -28,7 +20,7 @@ class App extends Component {
         this.state = {
             results: null,
             searchKey: '',
-            searchTerm: DEFAULT_QUERY,
+            searchTerm: globalVariable.DEFAULT_QUERY,
             error: null,
             isLoading: false,
             sortKey: 'NONE',
@@ -77,8 +69,8 @@ class App extends Component {
     fetchSearchTopStories (searchTerm, page=0) {
         this.setState({ isLoading: true });
 
-        axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}\
-${page}&${PARAM_HPP}${DEFAULT_HPP}`)
+        axios(`${globalVariable.PATH_BASE}${globalVariable.PATH_SEARCH}?${globalVariable.PARAM_SEARCH}${searchTerm}&${globalVariable.PARAM_PAGE}\
+${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
             .then(result => this._isMounted && this.setSearchTopStories(result.data))
             .catch(error => this._isMounted && this.setState({ error }));
     }
