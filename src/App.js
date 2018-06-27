@@ -4,6 +4,7 @@ import axios from 'axios';
 import './App.css';
 import Table from './Table';
 import Button from "./Button";
+import Search from './Search';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '10';
@@ -191,31 +192,4 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
     }
 }
 
-// Stateless Component
-const Search = ({
-                    value,
-                    onChange,
-                    onSubmit,
-                    children
-                }) => {
-    let input;
-    return (
-        <form onSubmit={onSubmit}>
-            <input
-                type="text"
-                value={value}
-                onChange={onChange}
-                ref={ (node) => input => node }
-            />
-            <button className="btn btn-primary btn-size" type="submit">
-                {children}
-            </button>
-        </form>
-    );
-};
-
 export default App;
-
-export {
-    Search,
-};

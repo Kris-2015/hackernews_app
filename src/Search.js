@@ -1,34 +1,26 @@
-//import React, { Component } from 'react';
+import React from 'react';
 
-/*class Search extends Component
-{
-    componentDidMount() {
-        if(this.input) {
-            this.input.focus();
-        }
-    }
-
-    render() {
-        const {
-            value,
-            onChange,
-            onSubmit,
-            children
-        } = this.props;
-
-        return (
-            <form onSubmit={onSubmit}>
-                {children}
-                <input
-                    type="text"
-                    value={ value }
-                    onChange={ onChange }
-                    ref = {(node) => { this.input = node; }}
+// Stateless Component
+const Search = ({
+                    value,
+                    onChange,
+                    onSubmit,
+                    children
+                }) => {
+    let input;
+    return (
+        <form onSubmit={onSubmit}>
+            <input
+                type="text"
+                value={value}
+                onChange={onChange}
+                ref={ (node) => input => node }
             />
-                <button type="submit">{ children }</button>
-            </form>
-        );
-    };
-}*/
+            <button className="btn btn-primary btn-size" type="submit">
+                {children}
+            </button>
+        </form>
+    );
+};
 
-//export default Search;
+export default Search;
