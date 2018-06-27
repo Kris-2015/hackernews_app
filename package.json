@@ -5,7 +5,10 @@
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-scripts": "1.1.1"
+    "react-scripts": "1.1.1",
+    "axios": "^0.18.0",
+    "classnames": "^2.2.6",
+    "lodash": "^4.17.10"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -14,6 +17,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "react-test-renderer": "^16.2.0"
+    "react-test-renderer": "^16.2.0",
   }
 }
