@@ -36,7 +36,30 @@ class App extends Component {
     }
 
     needToSearchTopStories(searchTerm) {
-        return !this.state.results[searchTerm];
+        // Get the result from cache
+        let cacheHits = localStorage.getItem(searchTerm);
+        let cachePage = localStorage.getItem('page');
+
+        // Return result from cache if cache data is present
+        if (cacheHits) {
+            this.setState({
+                results: {
+                    [searchTerm] : { hits : JSON.parse(cacheHits),
+                        page: JSON.parse(cachePage)
+                    },
+                },
+                isLoading: false
+            });
+
+            console.log('My cache results:', this.state);
+            console.log('returning data from cache');
+            return false;
+        }
+
+        console.log('Make an api call to get data!');
+        return true;
+        // Commenting the line for future reference
+        //return !this.state.results[searchTerm];
     }
 
     setSearchTopStories(result) {
@@ -59,6 +82,11 @@ class App extends Component {
             },
             isLoading: false
         });
+
+        console.log('After setting the state, Results:', this.state.results);
+        // Store the result and page limit in local storage by search key
+        localStorage.setItem(searchKey, JSON.stringify(updateHits));
+        localStorage.setItem('page', JSON.stringify(page));
     }
 
     onSearchChange(event) {
@@ -79,7 +107,12 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
 
         const { searchTerm } = this.state;
         this.setState({ searchKey: searchTerm });
-        this.fetchSearchTopStories(searchTerm);
+        //this.fetchSearchTopStories(searchTerm);
+
+        // Check whether to make api call or not
+        if (this.needToSearchTopStories(searchTerm)) {
+            this.fetchSearchTopStories(searchTerm);
+        }
     }
 
     componentWillUnmount() {
