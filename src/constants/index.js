@@ -1,6 +1,6 @@
 const globalVariable = {
     DEFAULT_QUERY:  'redux',
-    DEFAULT_HPP: 100,
+    DEFAULT_HPP: 20,
     PATH_BASE: 'http://hn.algolia.com/api/v1',
     PATH_SEARCH: '/search',
     PARAM_SEARCH: 'query=',
