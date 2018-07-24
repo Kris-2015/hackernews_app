@@ -5,9 +5,10 @@ import Table from './Table';
 import Button from "./Button";
 import Search from './Search';
 import globalVariable from './constants/index';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Loading = () =>
-    <div><i className="fas fa-spinner"></i></div>;
+    <div><i><FontAwesomeIcon icon="spinner" /></i></div>;
 
 class App extends Component {
 
@@ -182,7 +183,7 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
                         onChange={ this.onSearchChange }
                         onSubmit={ this.onSearchSubmit }
                     >
-                        <i className="fas fa-search"></i>
+                        <i><FontAwesomeIcon icon="search" /></i>
                     </Search>
                 </div>
                 {/*Applying Conditional Rendering in ternary operation for result*/}

@@ -16,7 +16,7 @@ const Search = ({
                 onChange={onChange}
                 ref={ (node) => input => node }
             />
-            <button className="btn btn-primary btn-size" type="submit">
+            <button className="btn btn-primary btn-size btn-search" type="submit">
                 {children}
             </button>
         </form>
