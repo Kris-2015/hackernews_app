@@ -6,14 +6,27 @@ import Button from "./Button";
 import Search from './Search';
 import globalVariable from './constants/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {Online, Offline} from 'react-detect-offline';
 
 const Loading = () =>
     <div><i><FontAwesomeIcon icon="spinner" /></i></div>;
 
+/**
+ * @class App
+ * @purpose Core part of the application
+ */
 class App extends Component {
 
+    /**
+     * @scope global variable
+     * @purpose indication regarding component has been mounted
+     */
     _isMounted = false;
 
+    /**
+     * @param props
+     * @purpose define state and bind class functions
+     */
     constructor (props) {
         super(props);
 
@@ -25,8 +38,12 @@ class App extends Component {
             isLoading: false,
             sortKey: 'NONE',
             isSortReverse: false,
+            online: false,
+            text: null,
+            connectivity: null,
         };
 
+        // Bind function in order to be recognised by react class component
         this.needToSearchTopStories = this.needToSearchTopStories.bind(this);
         this.setSearchTopStories = this.setSearchTopStories.bind(this);
         this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
@@ -34,8 +51,16 @@ class App extends Component {
         this.onSearchSubmit = this.onSearchSubmit.bind(this);
         this.onDismiss = this.onDismiss.bind(this);
         this.onSort = this.onSort.bind(this);
+        this.notifyOnline = this.notifyOnline.bind(this);
+        this.notifyOffline = this.notifyOffline.bind(this);
     }
 
+
+    /**
+     * Function to check whether api call is required
+     * @param searchTerm
+     * @return boolean
+     */
     needToSearchTopStories(searchTerm) {
         // Get the result from cache
         let cacheHits = localStorage.getItem(searchTerm);
@@ -43,6 +68,7 @@ class App extends Component {
 
         // Return result from cache if cache data is present
         if (cacheHits) {
+            // Update the state of the result with cache data
             this.setState({
                 results: {
                     [searchTerm] : { hits : JSON.parse(cacheHits),
@@ -63,19 +89,33 @@ class App extends Component {
         //return !this.state.results[searchTerm];
     }
 
+    /**
+     * Function to set search result in result state
+     * @param result
+     * @return void
+     */
     setSearchTopStories(result) {
+        // Destructing the state: reference ES6 Destructure
         const { hits, page } = result;
         const { searchKey, results } = this.state;
 
+        // Return old when search key is present
         const oldHits = results && results[searchKey]
             ? results[searchKey].hits
             : [];
 
+        // Update the hits data, if new data is present
         const updateHits = [
             ...oldHits,
             ...hits
         ];
 
+        // Set the state of the error if it is set to true
+        if (this.state.error) {
+            this.setState({error: false});
+        }
+
+        // Append the current result with old result
         this.setState({
             results: {
                 ...results,
@@ -90,40 +130,79 @@ class App extends Component {
         localStorage.setItem('page', JSON.stringify(page));
     }
 
+    /**
+     * Function to get the search term when search event is triggered
+     * @param event
+     * @return void
+     */
     onSearchChange(event) {
         this.setState({ searchTerm: event.target.value });
     }
 
+    /**
+     * Function to fetch stories from hacker-news api
+     * @param searchTerm
+     * @param page
+     * @return void
+     */
     fetchSearchTopStories (searchTerm, page=0) {
+        // Set the state of the isLoading to true, when new search request is made
         this.setState({ isLoading: true });
 
-        axios(`${globalVariable.PATH_BASE}${globalVariable.PATH_SEARCH}?${globalVariable.PARAM_SEARCH}${searchTerm}&${globalVariable.PARAM_PAGE}\
+        // Make api calls when network is present
+        if (navigator.onLine) {
+            axios(`${globalVariable.PATH_BASE}${globalVariable.PATH_SEARCH}?${globalVariable.PARAM_SEARCH}${searchTerm}&${globalVariable.PARAM_PAGE}\
 ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
-            .then(result => this._isMounted && this.setSearchTopStories(result.data))
-            .catch(error => this._isMounted && this.setState({ error }));
+                .then(result => this._isMounted && this.setSearchTopStories(result.data))
+                .catch(error => this._isMounted && this.setState({ error }));
+        } else {
+            // Set the error state to true if application is offline
+            this.setState({ error: true});
+        }
     }
 
+    /**
+     * React lifecycle component which gets called after render function
+     * @purpose After component has been mounted, perform search operation
+     * @return void
+     */
     componentDidMount() {
         this._isMounted = true;
 
         const { searchTerm } = this.state;
         this.setState({ searchKey: searchTerm });
-        //this.fetchSearchTopStories(searchTerm);
 
         // Check whether to make api call or not
         if (this.needToSearchTopStories(searchTerm)) {
             this.fetchSearchTopStories(searchTerm);
         }
+
+        // Register event for displaying online/offline message
+        window.addEventListener('online', this.notifyOnline);
+        window.addEventListener('offline', this.notifyOffline);
     }
 
+    /**
+     * React lifecycle component which will be called after component has mounted
+     * @purpose Remove the declared event listener and set isMounted flag to false
+     * @return void
+     */
     componentWillUnmount() {
         this._isMounted = false;
+        window.removeEventListener('online', this.notifyOnline);
+        window.removeEventListener('offline', this.notifyOffline);
     }
 
+    /**
+     * Function to perform search operation when search request has been triggered
+     * @purpose Get the requested search term and perform search operation
+     * @return void
+     */
     onSearchSubmit (event) {
         const { searchTerm } = this.state;
         this.setState({ searchKey: searchTerm });
 
+        // Make api call when network connection is alive
         if (this.needToSearchTopStories(searchTerm)) {
             this.fetchSearchTopStories(searchTerm);
         }
@@ -131,6 +210,11 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
         event.preventDefault();
     }
 
+    /**
+     * Function to remove the row when clicks trash button
+     * @purpose Update the result of current search key
+     * @return void
+     */
     onDismiss(id) {
         const { searchKey, results } = this.state;
         const { hits, page } = results[searchKey];
@@ -145,11 +229,36 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
         });
     }
 
+    /**
+     * Function to sort the search results
+     * @purose Perform the sorting based on search key
+     * @return void
+     */
     onSort(sortKey) {
         const isSortReverse = this.state.sortKey === sortKey &&
             !this.state.isSortReverse;
 
         this.setState({ sortKey, isSortReverse });
+    }
+
+    /**
+     * Function gets called which application's connection is alive
+     * @param e event
+     * @return void
+     */
+    notifyOnline(e) {
+        this.setState({ connectivity: true});
+        e.preventDefault();
+    }
+
+    /**
+     * Function gets called which application's connection is dead
+     * @param e event
+     * @return void
+     */
+    notifyOffline(e) {
+        this.setState({connectivity: false});
+        e.preventDefault();
     }
 
     render() {
@@ -177,7 +286,30 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
 
         return (
             <div className="page">
+                {/* Append the component of react-detect-offline*/}
+                <div>
+                    {/* Return the div when network connectivity is present or not */}
+                    {this.state.connectivity ?
+                        <Online>
+                            <div className="panel panel-success">
+                                <div className="panel-heading">
+                                    You're online !
+                                </div>
+                            </div>
+                        </Online>
+                        :
+                        <Offline>
+                            <div className="panel panel-danger">
+                                <div className="panel-heading">
+                                    You're offline !
+                                </div>
+                            </div>
+                        </Offline>
+                    }
+                </div>
+
                 <div className="interactions">
+                    {/* Search Component */}
                     <Search
                         value={ searchTerm }
                         onChange={ this.onSearchChange }
@@ -201,6 +333,7 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
                     />
                 }
 
+                {/* More button to generate more result as a paginated data */}
                 <div className="interactions">
                     {isLoading
                         ? <Loading/>
