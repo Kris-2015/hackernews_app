@@ -94,3 +94,8 @@
 body {
   background-color: aliceblue !important;
 }
+
+/************************ Animation Css ********************/
+.hide-online {
+  visibility: hidden;
+}
