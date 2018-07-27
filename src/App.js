@@ -6,7 +6,7 @@ import Button from "./Button";
 import Search from './Search';
 import globalVariable from './constants/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {Online, Offline} from 'react-detect-offline';
+import SlideToggle from './SlideToggle';
 
 const Loading = () =>
     <div><i><FontAwesomeIcon icon="spinner" /></i></div>;
@@ -286,27 +286,9 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
 
         return (
             <div className="page">
+
                 {/* Append the component of react-detect-offline*/}
-                <div>
-                    {/* Return the div when network connectivity is present or not */}
-                    {this.state.connectivity ?
-                        <Online>
-                            <div className="panel panel-success">
-                                <div className="panel-heading">
-                                    You're online !
-                                </div>
-                            </div>
-                        </Online>
-                        :
-                        <Offline>
-                            <div className="panel panel-danger">
-                                <div className="panel-heading">
-                                    You're offline !
-                                </div>
-                            </div>
-                        </Offline>
-                    }
-                </div>
+                <SlideToggle connectivity={this.state.connectivity} />
 
                 <div className="interactions">
                     {/* Search Component */}
@@ -340,6 +322,7 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
                         :
                         <Button
                             onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}
+                            className="btn btn-primary"
                         >
                             More
                         </Button>
