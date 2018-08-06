@@ -14,7 +14,3 @@ import 'jsstore/dist/jsstore';
 library.add(faStroopwafel, faTrash, faSearch, faSpinner);
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
-
-// if (module.hot) {
-//     module.hot.accept();
-// }
