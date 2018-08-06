@@ -9,6 +9,7 @@ import 'bootstrap/dist/js/bootstrap.min';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faStroopwafel, faTrash, faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import registerServiceWorker from './registerServiceWorker';
+import 'jsstore/dist/jsstore';
 
 library.add(faStroopwafel, faTrash, faSearch, faSpinner);
 ReactDOM.render(<App />, document.getElementById('root'));
