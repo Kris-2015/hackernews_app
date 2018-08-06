@@ -26,6 +26,9 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "axios": "^0.18.0",
+    "classnames": "^2.2.6",
+    "lodash": "^4.17.10",
     "react-test-renderer": "^16.2.0"
   }
 }
