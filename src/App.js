@@ -7,9 +7,7 @@ import Search from './Search';
 import globalVariable from './constants/index';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import SlideToggle from './SlideToggle';
-
-const Loading = () =>
-    <div><i><FontAwesomeIcon icon="spinner" /></i></div>;
+import Loading from './Loading';
 
 /**
  * @class App
