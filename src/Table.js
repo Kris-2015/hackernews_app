@@ -73,7 +73,7 @@ class Table extends Component
                             <p>{index + 1}</p>
                         </span>
                         <span className={ largeColumn }>
-                            <a href={item.url}>{item.title}</a>
+                            <a href={item.url} target="_blank">{item.title}</a>
                         </span>
                         <span className={ midColumn }>{item.author}</span>
                         <span className={ smallColumn }>
