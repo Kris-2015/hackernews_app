@@ -17,7 +17,7 @@ class App extends Component {
 
     /**
      * @scope global variable
-     * @purpose indication regarding component has been mounted
+     * @purpose indication regarding whether the component has been mounted or not.
      */
     _isMounted = false;
 
@@ -36,12 +36,9 @@ class App extends Component {
             isLoading: false,
             sortKey: 'NONE',
             isSortReverse: false,
-            online: false,
-            text: null,
-            connectivity: null,
         };
 
-        // Bind function in order to be recognised by react class component
+        // Bind function in order to get recognised by react class component
         this.needToSearchTopStories = this.needToSearchTopStories.bind(this);
         this.setSearchTopStories = this.setSearchTopStories.bind(this);
         this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
@@ -49,8 +46,6 @@ class App extends Component {
         this.onSearchSubmit = this.onSearchSubmit.bind(this);
         this.onDismiss = this.onDismiss.bind(this);
         this.onSort = this.onSort.bind(this);
-        this.notifyOnline = this.notifyOnline.bind(this);
-        this.notifyOffline = this.notifyOffline.bind(this);
     }
 
 
@@ -76,7 +71,6 @@ class App extends Component {
                 isLoading: false
             });
 
-            console.log('My cache results:', this.state);
             console.log('returning data from cache');
             return false;
         }
@@ -174,10 +168,6 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
         if (this.needToSearchTopStories(searchTerm)) {
             this.fetchSearchTopStories(searchTerm);
         }
-
-        // Register event for displaying online/offline message
-        window.addEventListener('online', this.notifyOnline);
-        window.addEventListener('offline', this.notifyOffline);
     }
 
     /**
@@ -187,8 +177,6 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
      */
     componentWillUnmount() {
         this._isMounted = false;
-        window.removeEventListener('online', this.notifyOnline);
-        window.removeEventListener('offline', this.notifyOffline);
     }
 
     /**
@@ -239,26 +227,6 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
         this.setState({ sortKey, isSortReverse });
     }
 
-    /**
-     * Function gets called which application's connection is alive
-     * @param e event
-     * @return void
-     */
-    notifyOnline(e) {
-        this.setState({ connectivity: true});
-        e.preventDefault();
-    }
-
-    /**
-     * Function gets called which application's connection is dead
-     * @param e event
-     * @return void
-     */
-    notifyOffline(e) {
-        this.setState({connectivity: false});
-        e.preventDefault();
-    }
-
     render() {
         const {
             searchTerm,
@@ -286,7 +254,7 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
             <div className="page">
 
                 {/* Append the component of react-detect-offline*/}
-                <SlideToggle connectivity={this.state.connectivity} />
+                <SlideToggle/>
 
                 <div className="interactions">
                     {/* Search Component */}
