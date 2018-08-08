@@ -3,21 +3,27 @@ import Button from './Button';
 import { sortBy } from 'lodash'
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import constants from './constants/constants';
 
-const idColumn = "col-sm-1";
-const largeColumn = "col-sm-6";
-const midColumn = "col-sm-2";
-const smallColumn = "col-sm-3";
-
-const SORTS  = {
-    NONE: list => list,
-    TITLE: list => sortBy(list, 'title'),
-    AUTHOR: list => sortBy(list, 'author'),
-};
-
+/**
+ * @class Table
+ * @purpose Table component which displays data in grid
+ */
 class Table extends Component
 {
     render() {
+        // bootstrap class column
+        const idColumn = constants.ID_COLUMN;
+        const largeColumn = constants.LARGE_COLUMN;
+        const midColumn = constants.MID_COLUMN;
+        const smallColumn = constants.SMALL_COLUMN;
+
+        const SORTS  = {
+            NONE: list => list,
+            TITLE: list => sortBy(list, 'title'),
+            AUTHOR: list => sortBy(list, 'author'),
+        };
+
         const {
             list,
             sortKey,

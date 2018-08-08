@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 
+/**
+ * @class Button
+ * @purpose Component which accepts some properties
+ */
 class Button extends Component
 {
     render () {
         const {
             onClick,
             className,
+            type,
             children,
         } = this.props;
 
@@ -13,7 +18,7 @@ class Button extends Component
             <button
                 onClick={onClick}
                 className={className}
-                type="button"
+                type={type}
             >
                 {children}
             </button>

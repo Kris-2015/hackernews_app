@@ -253,7 +253,7 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
             <div className="page">
 
                 {/* Append the component of react-detect-offline*/}
-                <SlideToggle/>
+                <SlideToggle />
 
                 <div className="interactions">
                     {/* Search Component */}
@@ -283,11 +283,12 @@ ${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
                 {/* More button to generate more result as a paginated data */}
                 <div className="interactions">
                     {isLoading
-                        ? <Loading/>
+                        ? <Loading />
                         :
                         <Button
                             onClick={() => this.fetchSearchTopStories(searchTerm, page + 1)}
                             className="btn btn-primary"
+                            type="button"
                         >
                             More
                         </Button>

@@ -1,6 +1,13 @@
 import React from 'react';
+import Button from './Button'
 
-// Stateless Component
+/**
+ * @param value
+ * @param onChange
+ * @param onSubmit
+ * @param children
+ * @return return search bar and button
+ */
 const Search = ({
                     value,
                     onChange,
@@ -16,9 +23,12 @@ const Search = ({
                 onChange={onChange}
                 ref={ (node) => input => node }
             />
-            <button className="btn btn-primary btn-size btn-search" type="submit">
+            <Button
+                className="btn btn-primary btn-size btn-search"
+                type="submit"
+            >
                 {children}
-            </button>
+            </Button>
         </form>
     );
 };
