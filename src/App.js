@@ -116,7 +116,6 @@ class App extends Component {
             isLoading: false
         });
 
-        console.log('After setting the state, Results:', this.state.results);
         // Store the result and page limit in local storage by search key
         localStorage.setItem(searchKey, JSON.stringify(updateHits));
         localStorage.setItem('page', JSON.stringify(page));
