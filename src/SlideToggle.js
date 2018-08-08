@@ -48,6 +48,8 @@ class SlideToggle extends Component {
      * @return void
      */
     notifyOnline(e) {
+        // Perform search operation when applicaton comes online
+        document.querySelector('.btn-search').click();
         this.setState({ connectivity: true});
         e.preventDefault();
     }
