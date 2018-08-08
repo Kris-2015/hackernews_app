@@ -4,7 +4,7 @@ import './App.css';
 import Table from './Table';
 import Button from "./Button";
 import Search from './Search';
-import globalVariable from './constants/index';
+import globalVariable from './constants/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import SlideToggle from './SlideToggle';
 import Loading from './Loading';
