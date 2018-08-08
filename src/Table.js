@@ -12,11 +12,13 @@ import constants from './constants/constants';
 class Table extends Component
 {
     render() {
-        // bootstrap class column
-        const idColumn = constants.ID_COLUMN;
-        const largeColumn = constants.LARGE_COLUMN;
-        const midColumn = constants.MID_COLUMN;
-        const smallColumn = constants.SMALL_COLUMN;
+        // bootstrap class column; Destructing the constants with different name
+        const {
+            ID_COLUMN: idColumn,
+            LARGE_COLUMN: largeColumn,
+            MID_COLUMN: midColumn,
+            SMALL_COLUMN:smallColumn,
+        } = constants;
 
         const SORTS  = {
             NONE: list => list,
