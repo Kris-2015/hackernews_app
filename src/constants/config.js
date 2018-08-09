@@ -1,4 +1,4 @@
-const globalVariable = {
+const config = {
     DEFAULT_QUERY:  'redux',
     DEFAULT_HPP: 20,
     PATH_BASE: 'https://hn.algolia.com/api/v1',
@@ -8,4 +8,4 @@ const globalVariable = {
     PARAM_HPP: 'hitsPerPage=',
 };
 
-export default globalVariable;
+export default config;

@@ -4,7 +4,7 @@ import './App.css';
 import Table from './Table';
 import Button from "./Button";
 import Search from './Search';
-import globalVariable from './constants/config';
+import config from './constants/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import SlideToggle from './SlideToggle';
 import Loading from './Loading';
@@ -31,7 +31,7 @@ class App extends Component {
         this.state = {
             results: null,
             searchKey: '',
-            searchTerm: globalVariable.DEFAULT_QUERY,
+            searchTerm: config.DEFAULT_QUERY,
             error: null,
             isLoading: false,
             sortKey: 'NONE',
@@ -142,8 +142,8 @@ class App extends Component {
 
         // Make api calls when network is present
         if (navigator.onLine) {
-            axios(`${globalVariable.PATH_BASE}${globalVariable.PATH_SEARCH}?${globalVariable.PARAM_SEARCH}${searchTerm}&${globalVariable.PARAM_PAGE}\
-${page}&${globalVariable.PARAM_HPP}${globalVariable.DEFAULT_HPP}`)
+            axios(`${config.PATH_BASE}${config.PATH_SEARCH}?${config.PARAM_SEARCH}${searchTerm}&${config.PARAM_PAGE}\
+${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
                 .then(result => this._isMounted && this.setSearchTopStories(result.data))
                 .catch(error => this._isMounted && this.setState({ error }));
         } else {
