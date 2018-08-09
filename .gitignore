@@ -16,7 +16,6 @@
 .env.test.local
 .env.production.local
 .idea/
-yarn.lock
 .scannerwork/
 
 npm-debug.log*
