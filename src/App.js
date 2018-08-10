@@ -204,7 +204,12 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
         const { searchKey, results } = this.state;
         const { hits, page } = results[searchKey];
         const isNotId = item => item.objectID !== id;
+
+        // Remove the particular row from the hit list i.e, search results
         const updatedHits = hits.filter(isNotId);
+
+        // Store the updated result
+        localStorage.setItem(searchKey, JSON.stringify(updatedHits));
 
         this.setState({
             results: {
