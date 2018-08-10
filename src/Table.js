@@ -3,7 +3,7 @@ import Button from './Button';
 import { sortBy } from 'lodash'
 import classNames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import constants from './constants/constants';
+import constants from './config/constants';
 
 /**
  * @class Table
@@ -12,7 +12,7 @@ import constants from './constants/constants';
 class Table extends Component
 {
     render() {
-        // bootstrap class column; Destructing the constants with different name
+        // bootstrap class column; Destructing the config with different name
         const {
             ID_COLUMN: idColumn,
             LARGE_COLUMN: largeColumn,

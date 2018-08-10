@@ -4,7 +4,7 @@ import './App.css';
 import Table from './Table';
 import Button from "./Button";
 import Search from './Search';
-import config from './constants/config';
+import config from './config/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import SlideToggle from './SlideToggle';
 import Loading from './Loading';
