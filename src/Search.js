@@ -2,6 +2,7 @@ import React from 'react';
 import Button from './Button'
 
 /**
+ * @purpose Stateless component which return search bar and button
  * @param value
  * @param onChange
  * @param onSubmit
