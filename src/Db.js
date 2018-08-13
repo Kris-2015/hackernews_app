@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import 'jsstore/dist/';
+import JsStore from 'jsstore/dist/jsstore';
+import 'jsstore/dist/jsstore.worker';
 import config from './config/config';
 
 /**
@@ -11,6 +12,7 @@ class Db extends Component {
         super (props);
 
         this.initJsStore = this.initJsStore.bind(this);
+        this.getDbSchema = this.getDbSchema.bind(this);
     }
 
     initJsStore() {
@@ -22,7 +24,7 @@ class Db extends Component {
                 if(isExist) {
                     connection.openDb(dbName);
                 } else {
-                    const database = getDbSchema();
+                    const database = this.getDbSchema();
                     connection.createDb(database);
                 }
             }).catch((err) => {
@@ -31,7 +33,37 @@ class Db extends Component {
     }
 
     getDbSchema() {
+        let dbName = 'hackernews_app';
 
+        let searchDataTable = {
+            name: 'search_data',
+            columns: [
+                {
+                    name: 'id',
+                    primaryKey: true,
+                    autoIncrement: true
+                },
+                {
+                    name: 'param',
+                    dataType: JsStore.DATA_TYPE.String
+                },
+                {
+                    name: 'data',
+                    dataType: JsStore.DATA_TYPE.String
+                },
+                {
+                    name: 'page',
+                    dataType: JsStore.DATA_TYPE.Number
+                }
+            ]
+        };
+
+        let createTable = {
+            name: dbName,
+            tables: searchDataTable
+        };
+
+        return createTable;
     }
 }
 
