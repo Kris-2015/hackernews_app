@@ -1,22 +1,27 @@
-import React, {Component} from 'react';
 import JsStore from 'jsstore/dist/jsstore';
-import 'jsstore/dist/jsstore.worker';
 import config from './config/config';
+import Worker from 'jsstore/dist/jsstore.worker';
 
 /**
  * @class DB
  * @purpose Indexed db
  */
-class Db extends Component {
-    constructor(props) {
-        super (props);
+class Db {
 
+    dbName = null;
+    constructor() {
+
+        console.log('Inside db component');
         this.initJsStore = this.initJsStore.bind(this);
         this.getDbSchema = this.getDbSchema.bind(this);
     }
 
     initJsStore() {
+        console.log('Db Component: initJsStore');
         const {DB_NAME: dbName} = config;
+
+        this.dbName = dbName;
+
         let connection = new JsStore.Instance(new Worker('jsstore.worker.js'));
 
         connection.isDbExist(dbName)
@@ -30,10 +35,14 @@ class Db extends Component {
             }).catch((err) => {
                 console.log('Error occurred while setting up db:', err);
         })
+
+        console.log('Connection:', connection);
     }
 
     getDbSchema() {
-        let dbName = 'hackernews_app';
+
+        console.log('Db Component: getDbSchema');
+        let dbName = this.dbName;
 
         let searchDataTable = {
             name: 'search_data',
