@@ -16,12 +16,6 @@ import Loading from './Loading';
 class App extends Component {
 
     /**
-     * @scope global variable
-     * @purpose indication regarding whether the component has been mounted or not.
-     */
-    _isMounted = false;
-
-    /**
      * @param props
      * @purpose define state and bind class functions
      */
@@ -37,6 +31,9 @@ class App extends Component {
             sortKey: 'NONE',
             isSortReverse: false,
         };
+
+        // It indicates whether the component has been mounted or not
+        this._isMounted = false;
 
         // Bind function in order to get recognised by react class component
         this.needToSearchTopStories = this.needToSearchTopStories.bind(this);
@@ -89,7 +86,7 @@ class App extends Component {
     setSearchTopStories(result) {
         // Destructing the state: reference ES6 Destructure
         const { hits, page } = result;
-        const { searchKey, results } = this.state;
+        const { searchKey, results, error } = this.state;
 
         // Return old when search key is present
         const oldHits = results && results[searchKey]
@@ -103,7 +100,7 @@ class App extends Component {
         ];
 
         // Set the state of the error if it is set to true
-        if (this.state.error) {
+        if (error) {
             this.setState({error: false});
         }
 
@@ -114,11 +111,11 @@ class App extends Component {
                 [searchKey] : { hits : updateHits, page },
             },
             isLoading: false
+        }, () => {
+            // Store the result and page limit in local storage by search key
+            localStorage.setItem(searchKey, JSON.stringify(updateHits));
+            localStorage.setItem('page', JSON.stringify(page));
         });
-
-        // Store the result and page limit in local storage by search key
-        localStorage.setItem(searchKey, JSON.stringify(updateHits));
-        localStorage.setItem('page', JSON.stringify(page));
     }
 
     /**
