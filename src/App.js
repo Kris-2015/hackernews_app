@@ -34,15 +34,6 @@ class App extends Component {
 
         // It indicates whether the component has been mounted or not
         this._isMounted = false;
-
-        // Bind function in order to get recognised by react class component
-        this.needToSearchTopStories = this.needToSearchTopStories.bind(this);
-        this.setSearchTopStories = this.setSearchTopStories.bind(this);
-        this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
-        this.onSearchChange = this.onSearchChange.bind(this);
-        this.onSearchSubmit = this.onSearchSubmit.bind(this);
-        this.onDismiss = this.onDismiss.bind(this);
-        this.onSort = this.onSort.bind(this);
     }
 
 
@@ -51,7 +42,7 @@ class App extends Component {
      * @param searchTerm
      * @return boolean
      */
-    needToSearchTopStories(searchTerm) {
+    needToSearchTopStories = (searchTerm) => {
         // Get the result from cache
         let cacheHits = localStorage.getItem(searchTerm);
         let cachePage = localStorage.getItem('page');
@@ -76,14 +67,14 @@ class App extends Component {
         return true;
         // Commenting the line for future reference
         //return !this.state.results[searchTerm];
-    }
+    };
 
     /**
      * Function to set search result in result state
      * @param result
      * @return void
      */
-    setSearchTopStories(result) {
+    setSearchTopStories = (result) => {
         // Destructing the state: reference ES6 Destructure
         const { hits, page } = result;
         const { searchKey, results, error } = this.state;
@@ -116,16 +107,14 @@ class App extends Component {
             localStorage.setItem(searchKey, JSON.stringify(updateHits));
             localStorage.setItem('page', JSON.stringify(page));
         });
-    }
+    };
 
     /**
      * Function to get the search term when search event is triggered
      * @param event
      * @return void
      */
-    onSearchChange(event) {
-        this.setState({ searchTerm: event.target.value });
-    }
+    onSearchChange = (event) => this.setState({ searchTerm: event.target.value });
 
     /**
      * Function to fetch stories from hacker-news api
@@ -133,7 +122,7 @@ class App extends Component {
      * @param page
      * @return void
      */
-    fetchSearchTopStories (searchTerm, page=0) {
+    fetchSearchTopStories = (searchTerm, page=0) => {
         // Set the state of the isLoading to true, when new search request is made
         this.setState({ isLoading: true });
 
@@ -147,7 +136,7 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
             // Set the error state to true if application is offline
             this.setState({ error: true});
         }
-    }
+    };
 
     /**
      * React lifecycle component which gets called after render function
@@ -180,7 +169,7 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
      * @purpose Get the requested search term and perform search operation
      * @return void
      */
-    onSearchSubmit (event) {
+    onSearchSubmit = (event) => {
         const { searchTerm } = this.state;
         this.setState({ searchKey: searchTerm });
 
@@ -190,14 +179,14 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
         }
 
         event.preventDefault();
-    }
+    };
 
     /**
      * Function to remove the row when clicks trash button
      * @purpose Update the result of current search key
      * @return void
      */
-    onDismiss(id) {
+    onDismiss = (id) => {
         const { searchKey, results } = this.state;
         const { hits, page } = results[searchKey];
         const isNotId = item => item.objectID !== id;
@@ -214,19 +203,19 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
                 [searchKey]: { hits: updatedHits, page }
             }
         });
-    }
+    };
 
     /**
      * Function to sort the search results
      * @purose Perform the sorting based on search key
      * @return void
      */
-    onSort(sortKey) {
+    onSort = (sortKey) => {
         const isSortReverse = this.state.sortKey === sortKey &&
             !this.state.isSortReverse;
 
         this.setState({ sortKey, isSortReverse });
-    }
+    };
 
     render() {
         const {
