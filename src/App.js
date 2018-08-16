@@ -127,7 +127,7 @@ class App extends Component {
 
         // Make api calls when network is present
         if (navigator.onLine) {
-                api.getList(searchTerm, page)
+                api(searchTerm, page)
                 .then(result => this._isMounted && this.setSearchTopStories(result.data))
                 .catch(error => this._isMounted && this.setState({ error }));
         } else {
