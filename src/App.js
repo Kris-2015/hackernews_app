@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './App.css';
-import Table from './Table';
-import Button from "./Button";
-import Search from './Search';
-import config from './config/config';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import SlideToggle from './SlideToggle';
-import Loading from './Loading';
+import Table from './components/Table/index';
+import Button from "./components/Button";
+import Search from './components/Search/index';
+import config from './config/config';
+import SlideToggle from './components/SlideToggle/index';
+import Loading from './components/Loading';
 
 /**
  * @class App
