@@ -5,3 +5,11 @@ input {
     margin-right: 10px;
     border: 1px solid #dddddd;
 }
+
+.btn-size {
+    padding: 6px 36px !important;
+    font-size: 17px !important;
+}
+.btn-search {
+    margin-left: 10px;
+}
