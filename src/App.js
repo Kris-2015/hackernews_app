@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Table from './components/Table/index';
@@ -8,7 +7,7 @@ import Search from './components/Search/index';
 import config from './config/config';
 import SlideToggle from './components/SlideToggle/index';
 import Loading from './components/Loading';
-
+import api from './components/Api';
 /**
  * @class App
  * @purpose Core part of the application
@@ -128,8 +127,7 @@ class App extends Component {
 
         // Make api calls when network is present
         if (navigator.onLine) {
-            axios(`${config.PATH_BASE}${config.PATH_SEARCH}?${config.PARAM_SEARCH}${searchTerm}&${config.PARAM_PAGE}\
-${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
+                api.getList(searchTerm, page)
                 .then(result => this._isMounted && this.setSearchTopStories(result.data))
                 .catch(error => this._isMounted && this.setState({ error }));
         } else {
