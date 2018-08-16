@@ -134,7 +134,7 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
                 .catch(error => this._isMounted && this.setState({ error }));
         } else {
             // Set the error state to true if application is offline
-            this.setState({ error: true});
+            this.setState({ error: true });
         }
     };
 
@@ -143,7 +143,7 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
      * @purpose After component has been mounted, perform search operation
      * @return void
      */
-    componentDidMount() {
+    componentDidMount () {
         this._isMounted = true;
 
         const { searchTerm } = this.state;
@@ -194,14 +194,14 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
         // Remove the particular row from the hit list i.e, search results
         const updatedHits = hits.filter(isNotId);
 
-        // Store the updated result
-        localStorage.setItem(searchKey, JSON.stringify(updatedHits));
-
         this.setState({
             results: {
                 ...results,
                 [searchKey]: { hits: updatedHits, page }
             }
+        }, () => {
+            // Store the updated result
+            localStorage.setItem(searchKey, JSON.stringify(updatedHits));
         });
     };
 
