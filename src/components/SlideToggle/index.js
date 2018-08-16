@@ -45,8 +45,8 @@ class SlideToggle extends Component {
      * @return void
      */
     notifyOnline = (e) => {
-        this.setState({ connectivity: true});
         e.preventDefault();
+        this.setState({ connectivity: true});
     };
 
     /**
@@ -55,8 +55,8 @@ class SlideToggle extends Component {
      * @return void
      */
     notifyOffline = (e) => {
-        this.setState({connectivity: false});
         e.preventDefault();
+        this.setState({connectivity: false});
     };
 
     render() {
