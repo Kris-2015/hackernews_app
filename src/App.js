@@ -3,7 +3,7 @@ import axios from 'axios';
 import './App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Table from './components/Table/index';
-import Button from "./components/Button";
+import Button from './components/Button';
 import Search from './components/Search/index';
 import config from './config/config';
 import SlideToggle from './components/SlideToggle/index';
