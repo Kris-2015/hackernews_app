@@ -1,5 +1,6 @@
 import React from 'react';
-import Button from './Button'
+import Button from '../Button'
+import './index.css';
 
 /**
  * @purpose Stateless component which return search bar and button

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Online, Offline} from 'react-detect-offline';
+import './index.css';
 
 /**
   * @purpose Slide up / down the div on getting network
@@ -16,10 +17,6 @@ class SlideToggle extends Component {
         this.state = {
             connectivity: false,
         };
-
-        // Bind function in order to get recognised by react class component
-        this.notifyOnline = this.notifyOnline.bind(this);
-        this.notifyOffline = this.notifyOffline.bind(this);
     }
 
     /**
@@ -47,20 +44,20 @@ class SlideToggle extends Component {
      * @param e event
      * @return void
      */
-    notifyOnline(e) {
-        this.setState({ connectivity: true});
+    notifyOnline = (e) => {
         e.preventDefault();
-    }
+        this.setState({ connectivity: true});
+    };
 
     /**
      * Function gets called which application's connection is dead
      * @param e event
      * @return void
      */
-    notifyOffline(e) {
-        this.setState({connectivity: false});
+    notifyOffline = (e) => {
         e.preventDefault();
-    }
+        this.setState({connectivity: false});
+    };
 
     render() {
         const {connectivity} = this.state;

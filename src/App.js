@@ -1,25 +1,18 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import './App.css';
-import Table from './Table';
-import Button from "./Button";
-import Search from './Search';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Table from './components/Table/index';
+import Button from './components/Button';
+import Search from './components/Search/index';
 import config from './config/config';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import SlideToggle from './SlideToggle';
-import Loading from './Loading';
-
+import SlideToggle from './components/SlideToggle/index';
+import Loading from './components/Loading';
+import api from './components/Api';
 /**
  * @class App
  * @purpose Core part of the application
  */
 class App extends Component {
-
-    /**
-     * @scope global variable
-     * @purpose indication regarding whether the component has been mounted or not.
-     */
-    _isMounted = false;
 
     /**
      * @param props
@@ -38,14 +31,8 @@ class App extends Component {
             isSortReverse: false,
         };
 
-        // Bind function in order to get recognised by react class component
-        this.needToSearchTopStories = this.needToSearchTopStories.bind(this);
-        this.setSearchTopStories = this.setSearchTopStories.bind(this);
-        this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
-        this.onSearchChange = this.onSearchChange.bind(this);
-        this.onSearchSubmit = this.onSearchSubmit.bind(this);
-        this.onDismiss = this.onDismiss.bind(this);
-        this.onSort = this.onSort.bind(this);
+        // It indicates whether the component has been mounted or not
+        this._isMounted = false;
     }
 
 
@@ -54,7 +41,7 @@ class App extends Component {
      * @param searchTerm
      * @return boolean
      */
-    needToSearchTopStories(searchTerm) {
+    needToSearchTopStories = (searchTerm) => {
         // Get the result from cache
         let cacheHits = localStorage.getItem(searchTerm);
         let cachePage = localStorage.getItem('page');
@@ -79,17 +66,17 @@ class App extends Component {
         return true;
         // Commenting the line for future reference
         //return !this.state.results[searchTerm];
-    }
+    };
 
     /**
      * Function to set search result in result state
      * @param result
      * @return void
      */
-    setSearchTopStories(result) {
+    setSearchTopStories = (result) => {
         // Destructing the state: reference ES6 Destructure
         const { hits, page } = result;
-        const { searchKey, results } = this.state;
+        const { searchKey, results, error } = this.state;
 
         // Return old when search key is present
         const oldHits = results && results[searchKey]
@@ -103,7 +90,7 @@ class App extends Component {
         ];
 
         // Set the state of the error if it is set to true
-        if (this.state.error) {
+        if (error) {
             this.setState({error: false});
         }
 
@@ -114,21 +101,19 @@ class App extends Component {
                 [searchKey] : { hits : updateHits, page },
             },
             isLoading: false
+        }, () => {
+            // Store the result and page limit in local storage by search key
+            localStorage.setItem(searchKey, JSON.stringify(updateHits));
+            localStorage.setItem('page', JSON.stringify(page));
         });
-
-        // Store the result and page limit in local storage by search key
-        localStorage.setItem(searchKey, JSON.stringify(updateHits));
-        localStorage.setItem('page', JSON.stringify(page));
-    }
+    };
 
     /**
      * Function to get the search term when search event is triggered
      * @param event
      * @return void
      */
-    onSearchChange(event) {
-        this.setState({ searchTerm: event.target.value });
-    }
+    onSearchChange = (event) => this.setState({ searchTerm: event.target.value });
 
     /**
      * Function to fetch stories from hacker-news api
@@ -136,30 +121,28 @@ class App extends Component {
      * @param page
      * @return void
      */
-    fetchSearchTopStories (searchTerm, page=0) {
+    fetchSearchTopStories = (searchTerm, page=0) => {
         // Set the state of the isLoading to true, when new search request is made
         this.setState({ isLoading: true });
 
         // Make api calls when network is present
         if (navigator.onLine) {
-            axios(`${config.PATH_BASE}${config.PATH_SEARCH}?${config.PARAM_SEARCH}${searchTerm}&${config.PARAM_PAGE}\
-${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
+                api(searchTerm, page)
                 .then(result => this._isMounted && this.setSearchTopStories(result.data))
                 .catch(error => this._isMounted && this.setState({ error }));
         } else {
             // Set the error state to true if application is offline
-            this.setState({ error: true});
+            this.setState({ error: true });
         }
-    }
+    };
 
     /**
      * React lifecycle component which gets called after render function
      * @purpose After component has been mounted, perform search operation
      * @return void
      */
-    componentDidMount() {
+    componentDidMount () {
         this._isMounted = true;
-
         const { searchTerm } = this.state;
         this.setState({ searchKey: searchTerm });
 
@@ -183,7 +166,8 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
      * @purpose Get the requested search term and perform search operation
      * @return void
      */
-    onSearchSubmit (event) {
+    onSearchSubmit = (event) => {
+        event.preventDefault();
         const { searchTerm } = this.state;
         this.setState({ searchKey: searchTerm });
 
@@ -191,16 +175,14 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
         if (this.needToSearchTopStories(searchTerm)) {
             this.fetchSearchTopStories(searchTerm);
         }
-
-        event.preventDefault();
-    }
+    };
 
     /**
      * Function to remove the row when clicks trash button
      * @purpose Update the result of current search key
      * @return void
      */
-    onDismiss(id) {
+    onDismiss = (id) => {
         const { searchKey, results } = this.state;
         const { hits, page } = results[searchKey];
         const isNotId = item => item.objectID !== id;
@@ -208,28 +190,28 @@ ${page}&${config.PARAM_HPP}${config.DEFAULT_HPP}`)
         // Remove the particular row from the hit list i.e, search results
         const updatedHits = hits.filter(isNotId);
 
-        // Store the updated result
-        localStorage.setItem(searchKey, JSON.stringify(updatedHits));
-
         this.setState({
             results: {
                 ...results,
                 [searchKey]: { hits: updatedHits, page }
             }
+        }, () => {
+            // Store the updated result
+            localStorage.setItem(searchKey, JSON.stringify(updatedHits));
         });
-    }
+    };
 
     /**
      * Function to sort the search results
      * @purose Perform the sorting based on search key
      * @return void
      */
-    onSort(sortKey) {
+    onSort = (sortKey) => {
         const isSortReverse = this.state.sortKey === sortKey &&
             !this.state.isSortReverse;
 
         this.setState({ sortKey, isSortReverse });
-    }
+    };
 
     render() {
         const {
