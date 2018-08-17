@@ -1,5 +1,5 @@
-import JsStore from 'jsstore/dist/jsstore';
-import config from './config/config';
+import * as JsStore from 'jsstore';
+import config from '../config/config';
 import Worker from 'jsstore/dist/jsstore.worker';
 
 /**
@@ -8,21 +8,18 @@ import Worker from 'jsstore/dist/jsstore.worker';
  */
 class Db {
 
-    dbName = null;
     constructor() {
-
         console.log('Inside db component');
-        this.initJsStore = this.initJsStore.bind(this);
-        this.getDbSchema = this.getDbSchema.bind(this);
+        this.dbName = null;
+
+        this.initJsStore();
     }
 
-    initJsStore() {
+    initJsStore = () => {
         console.log('Db Component: initJsStore');
         const {DB_NAME: dbName} = config;
-
         this.dbName = dbName;
-
-        let connection = new JsStore.Instance(new Worker('jsstore.worker.js'));
+        let connection = new JsStore.Instance(new Worker());
 
         connection.isDbExist(dbName)
             .then((isExist) => {
@@ -34,12 +31,12 @@ class Db {
                 }
             }).catch((err) => {
                 console.log('Error occurred while setting up db:', err);
-        })
+        });
 
         console.log('Connection:', connection);
-    }
+    };
 
-    getDbSchema() {
+    getDbSchema = () => {
 
         console.log('Db Component: getDbSchema');
         let dbName = this.dbName;
@@ -67,13 +64,11 @@ class Db {
             ]
         };
 
-        let createTable = {
+        return {
             name: dbName,
             tables: searchDataTable
         };
-
-        return createTable;
-    }
+    };
 }
 
 export default Db;
