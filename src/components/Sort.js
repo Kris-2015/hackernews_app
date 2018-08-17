@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from "classnames";
 import Button from './Button';
 
-
 /**
  * @purpose Stateless component which perform sorting
  * of results.
