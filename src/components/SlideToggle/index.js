@@ -68,18 +68,14 @@ class SlideToggle extends Component {
                 {/* Return the div when network connectivity is present or not */}
                 {connectivity ?
                     <Online>
-                        <div className="panel panel-success">
-                            <div className="panel-heading">
-                                You're online !
-                            </div>
+                        <div className="alert alert-success" role="alert">
+                            You're online !
                         </div>
                     </Online>
                     :
                     <Offline>
-                        <div className="panel panel-danger">
-                            <div className="panel-heading">
-                                You're offline !
-                            </div>
+                        <div className="alert alert-danger" role="alert">
+                            You're offline !
                         </div>
                     </Offline>
                 }
