@@ -7,6 +7,7 @@ import config from './config/config';
 import SlideToggle from './components/SlideToggle/index';
 import Loading from './components/Loading';
 import api from './components/Api';
+
 /**
  * @class App
  * @purpose Core part of the application
