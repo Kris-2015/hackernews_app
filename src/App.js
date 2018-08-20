@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Table from './components/Table/index';
 import Button from './components/Button';
 import Search from './components/Search/index';
@@ -249,7 +248,7 @@ class App extends Component {
                         onChange={ this.onSearchChange }
                         onSubmit={ this.onSearchSubmit }
                     >
-                        <i><FontAwesomeIcon icon="search" /></i>
+                        <i className="fa fa-search"></i>
                     </Search>
                 </div>
                 {/*Applying Conditional Rendering in ternary operation for result*/}

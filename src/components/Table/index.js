@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Button from '../Button';
 import { sortBy } from 'lodash'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import constants from '../../config/constants';
 import Sort from '../Sort';
 import './index.css';
@@ -82,9 +81,7 @@ class Table extends Component
                                 onClick={() => onDismiss(item.objectID)}
                                 className="btn btn-danger btn-size"
                             >
-                            <i>
-                                <FontAwesomeIcon icon="trash" />
-                            </i>
+                            <i className="fa fa-trash"></i>
                             </Button>
                         </span>
                     </div>
