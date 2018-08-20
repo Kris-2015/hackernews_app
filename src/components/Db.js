@@ -13,9 +13,15 @@ class Db {
         console.log('Inside db component');
         this.dbName = null;
 
+        // Perform database initialization
         this.initJsStore();
     }
 
+    /**
+     * Function to setup database connection and create db is not created
+     * @param void
+     * @return void
+     */
     initJsStore = () => {
         console.log('Db Component: initJsStore');
         const {DB_NAME: dbName} = config;
@@ -37,6 +43,11 @@ class Db {
         console.log('Connection:', connection);
     };
 
+    /**
+     * Function to create tables
+     * @param void
+     * @returns {{name: *|string|null, tables: *[]}}
+     */
     getDbSchema = () => {
 
         console.log('Db Component: getDbSchema');
@@ -67,7 +78,7 @@ class Db {
 
         return {
             name: dbName,
-            tables: searchDataTable
+            tables: [searchDataTable]
         };
     };
 }
