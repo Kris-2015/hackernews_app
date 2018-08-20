@@ -6,6 +6,7 @@ const config = {
     PARAM_SEARCH: 'query=',
     PARAM_PAGE: 'page=',
     PARAM_HPP: 'hitsPerPage=',
+    DB_NAME: 'hackernews_app',
 };
 
 export default config;
