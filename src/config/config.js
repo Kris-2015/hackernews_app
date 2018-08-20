@@ -1,12 +1,12 @@
 const config = {
-    DEFAULT_QUERY:  'redux',
-    DEFAULT_HPP: 20,
-    PATH_BASE: 'https://hn.algolia.com/api/v1',
-    PATH_SEARCH: '/search',
-    PARAM_SEARCH: 'query=',
-    PARAM_PAGE: 'page=',
-    PARAM_HPP: 'hitsPerPage=',
-    DB_NAME: 'hackernews_app',
+    DEFAULT_QUERY:  process.env.REACT_APP_DEFAULT_QUERY,
+    DEFAULT_HPP: process.env.REACT_APP_DEFAULT_HPP,
+    PATH_BASE: process.env.REACT_APP_PATH_BASE,
+    PATH_SEARCH: process.env.REACT_APP_PATH_SEARCH,
+    PARAM_SEARCH: process.env.REACT_APP_PARAM_SEARCH,
+    PARAM_PAGE: process.env.REACT_APP_PARAM_PAGE,
+    PARAM_HPP: process.env.REACT_APP_PARAM_HPP,
+    DB_NAME: process.env.REACT_APP_DB_NAME
 };
 
 export default config;

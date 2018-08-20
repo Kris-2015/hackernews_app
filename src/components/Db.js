@@ -1,6 +1,7 @@
+/* eslint import/no-webpack-loader-syntax: off */
 import * as JsStore from 'jsstore';
 import config from '../config/config';
-import Worker from 'jsstore/dist/jsstore.worker';
+import * as workerPath from 'file-loader?name=scripts/[name].[hash].js!jsstore/dist/jsstore.worker.min.js';
 
 /**
  * @class DB
@@ -19,7 +20,7 @@ class Db {
         console.log('Db Component: initJsStore');
         const {DB_NAME: dbName} = config;
         this.dbName = dbName;
-        let connection = new JsStore.Instance(new Worker());
+        let connection = new JsStore.Instance(new Worker(workerPath));
 
         connection.isDbExist(dbName)
             .then((isExist) => {
@@ -30,7 +31,7 @@ class Db {
                     connection.createDb(database);
                 }
             }).catch((err) => {
-                console.log('Error occurred while setting up db:', err);
+            console.log('Error occurred while setting up db:', err);
         });
 
         console.log('Connection:', connection);
