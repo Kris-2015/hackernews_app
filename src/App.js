@@ -7,6 +7,7 @@ import config from './config/config';
 import SlideToggle from './components/SlideToggle/index';
 import Loading from './components/Loading';
 import api from './components/Api';
+import Db from './components/Db';
 
 /**
  * @class App
@@ -33,6 +34,7 @@ class App extends Component {
 
         // It indicates whether the component has been mounted or not
         this._isMounted = false;
+        this.db = null;
     }
 
 
@@ -43,22 +45,22 @@ class App extends Component {
      */
     needToSearchTopStories = (searchTerm) => {
         // Get the result from cache
-        let cacheHits = localStorage.getItem(searchTerm);
-        let cachePage = localStorage.getItem('page');
+        let cacheHits = this.db.getDataByKey(searchTerm);
 
+        console.log('Result of select:', cacheHits);
         // Return result from cache if cache data is present
-        if (cacheHits) {
+        if (cacheHits.success) {
             // Update the state of the result with cache data
             this.setState({
                 results: {
-                    [searchTerm] : { hits : JSON.parse(cacheHits),
-                        page: JSON.parse(cachePage)
+                    [searchTerm] : { hits : JSON.parse(cacheHits.results.data),
+                        page: cacheHits.results.page
                     },
                 },
                 isLoading: false
             });
 
-            console.log('returning data from cache');
+            console.log('returning data from indexeddb');
             return false;
         }
 
@@ -102,9 +104,9 @@ class App extends Component {
             },
             isLoading: false
         }, () => {
-            // Store the result and page limit in local storage by search key
-            localStorage.setItem(searchKey, JSON.stringify(updateHits));
-            localStorage.setItem('page', JSON.stringify(page));
+            // Store the result and page limit in indexeddb by search key
+            let searchData = JSON.stringify(updateHits);
+            this.db.insertData(searchKey, searchData, page);
         });
     };
 
@@ -145,6 +147,11 @@ class App extends Component {
         this._isMounted = true;
         const { searchTerm } = this.state;
         this.setState({ searchKey: searchTerm });
+
+        // If db doesn't have Db object, then create a new object
+        if (!this.db) {
+            this.db = new Db();
+        }
 
         // Check whether to make api call or not
         if (this.needToSearchTopStories(searchTerm)) {

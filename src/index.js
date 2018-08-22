@@ -7,7 +7,6 @@ import 'font-awesome/css/font-awesome.css';
 import 'font-awesome/fonts/fontawesome-webfont.svg';
 import registerServiceWorker from './registerServiceWorker';
 import 'jsstore/dist/jsstore';
-import Db from './components/Db';
 
-ReactDOM.render(<App db={ new Db() } />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

@@ -10,8 +10,11 @@ import * as workerPath from 'file-loader?name=scripts/[name].[hash].js!jsstore/d
 class Db {
 
     constructor() {
-        console.log('Inside db component');
         this.dbName = null;
+        this.connection = null;
+        this.searchTable = 'search_data';
+        this.results = null;
+        this.success = false;
 
         // Perform database initialization
         this.initJsStore();
@@ -26,7 +29,7 @@ class Db {
         console.log('Db Component: initJsStore');
         const {DB_NAME: dbName} = config;
         this.dbName = dbName;
-        let connection = new JsStore.Instance(new Worker(workerPath));
+        let connection = this.connection = new JsStore.Instance(new Worker(workerPath));
 
         connection.isDbExist(dbName)
             .then((isExist) => {
@@ -52,9 +55,10 @@ class Db {
 
         console.log('Db Component: getDbSchema');
         let dbName = this.dbName;
+        let tableName = this.searchTable;
 
         let searchDataTable = {
-            name: 'search_data',
+            name: tableName,
             columns: [
                 {
                     name: 'id',
@@ -80,6 +84,70 @@ class Db {
             name: dbName,
             tables: [searchDataTable]
         };
+    };
+
+    /**
+     * Function to perform insertion
+     * @param searchParam
+     * @param searchData
+     * @param page
+     */
+    insertData = (searchParam, searchData, page) => {
+
+        console.log('Give me table name:', this.searchTable);
+        // Organise the data insertion format
+        let searchTableData = {
+            param: searchParam,
+            data: searchData,
+            page: page
+        };
+
+        // Perform insert operation
+        this.connection.insert({
+            into: this.searchTable,
+            values: [searchTableData]
+        }).then((rowInserted) => {
+            if (rowInserted > 0) {
+                console.log('Successfully Inserted!');
+            }
+        }).catch((err) => {
+            console.log('Error Occurred:', err);
+        });
+    };
+
+    /**
+     * Function to perform select operation
+     * @param searchKey
+     */
+    getDataByKey = (searchKey) => {
+
+        console.log('searchKey', searchKey);
+        // Perform select operation
+        this.connection.select({
+            from: this.searchTable,
+            where: {
+                param: searchKey,
+            }
+        }).then((results) => this.setResults(results, true))
+            .catch((err) => this.setResults(err, false));
+
+        console.log(this.results);
+        return {
+            results: this.results,
+            success: this.success
+        };
+    };
+
+    /**
+     * Function to return result after select operation
+     * @param results
+     * @param success
+     */
+    setResults = (results, success=false) => {
+        console.log('Setting the results:', results);
+        this.results = results[0];
+        console.log('checking result:', results);
+        this.success = success;
     };
 }
 
