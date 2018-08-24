@@ -17,7 +17,7 @@ class App extends Component {
 
     /**
      * @param props
-     * @purpose define state and bind class functions
+     * @purpose define state
      */
     constructor (props) {
         super(props);
@@ -43,18 +43,17 @@ class App extends Component {
      * @param searchTerm
      * @return boolean
      */
-    needToSearchTopStories = (searchTerm) => {
+    needToSearchTopStories = async (searchTerm) => {
         // Get the result from cache
-        let cacheHits = this.db.getDataByKey(searchTerm);
+        let cacheHits = await this.db.getDataByKey(searchTerm);
 
-        console.log('Result of select:', cacheHits);
         // Return result from cache if cache data is present
         if (cacheHits.success) {
             // Update the state of the result with cache data
             this.setState({
                 results: {
-                    [searchTerm] : { hits : JSON.parse(cacheHits.results.data),
-                        page: cacheHits.results.page
+                    [searchTerm] : { hits : JSON.parse(cacheHits.result.data),
+                        page: cacheHits.result.page
                     },
                 },
                 isLoading: false
@@ -66,8 +65,6 @@ class App extends Component {
 
         console.log('Make an api call to get data!');
         return true;
-        // Commenting the line for future reference
-        //return !this.state.results[searchTerm];
     };
 
     /**
@@ -154,9 +151,13 @@ class App extends Component {
         }
 
         // Check whether to make api call or not
-        if (this.needToSearchTopStories(searchTerm)) {
-            this.fetchSearchTopStories(searchTerm);
-        }
+        this.needToSearchTopStories(searchTerm)
+            .then((result) => {
+                if (result) {
+                    // If result is false,then make api call
+                    this.fetchSearchTopStories(searchTerm);
+                }
+            });
     }
 
     /**
@@ -178,10 +179,14 @@ class App extends Component {
         const { searchTerm } = this.state;
         this.setState({ searchKey: searchTerm });
 
-        // Make api call when network connection is alive
-        if (this.needToSearchTopStories(searchTerm)) {
-            this.fetchSearchTopStories(searchTerm);
-        }
+        // Check whether to make api call or not
+        this.needToSearchTopStories(searchTerm)
+            .then((result) => {
+                if (result) {
+                    // If result is false,then make api call
+                    this.fetchSearchTopStories(searchTerm);
+                }
+            });
     };
 
     /**
@@ -204,7 +209,8 @@ class App extends Component {
             }
         }, () => {
             // Store the updated result
-            localStorage.setItem(searchKey, JSON.stringify(updatedHits));
+            let searchData = JSON.stringify(updatedHits);
+            this.db.insertData(searchKey, searchData, page);
         });
     };
 

@@ -26,7 +26,6 @@ class Db {
      * @return void
      */
     initJsStore = () => {
-        console.log('Db Component: initJsStore');
         const {DB_NAME: dbName} = config;
         this.dbName = dbName;
         let connection = this.connection = new JsStore.Instance(new Worker(workerPath));
@@ -42,8 +41,6 @@ class Db {
             }).catch((err) => {
             console.log('Error occurred while setting up db:', err);
         });
-
-        console.log('Connection:', connection);
     };
 
     /**
@@ -52,8 +49,6 @@ class Db {
      * @returns {{name: *|string|null, tables: *[]}}
      */
     getDbSchema = () => {
-
-        console.log('Db Component: getDbSchema');
         let dbName = this.dbName;
         let tableName = this.searchTable;
 
@@ -93,8 +88,6 @@ class Db {
      * @param page
      */
     insertData = (searchParam, searchData, page) => {
-
-        console.log('Give me table name:', this.searchTable);
         // Organise the data insertion format
         let searchTableData = {
             param: searchParam,
@@ -118,36 +111,32 @@ class Db {
     /**
      * Function to perform select operation
      * @param searchKey
+     * @returns {Promise<{result: *, success: boolean}>}
      */
-    getDataByKey = (searchKey) => {
+    getDataByKey = async (searchKey) => {
+        let giveResult = null;
+        let successTxt = false;
 
-        console.log('searchKey', searchKey);
         // Perform select operation
-        this.connection.select({
+        await this.connection.select({
             from: this.searchTable,
             where: {
                 param: searchKey,
             }
-        }).then((results) => this.setResults(results, true))
-            .catch((err) => this.setResults(err, false));
+        }).then( function(results) {
+            giveResult = results;
 
-        console.log(this.results);
+            // Return 1 if array length is greater than 0
+            successTxt = (results.length > 0) ? 1 : 0;
+        }).catch(function(error) {
+            successTxt = 0;
+            console.log('Error while select operation:', error);
+        });
+
         return {
-            results: this.results,
-            success: this.success
+            result: giveResult[0],
+            success: successTxt
         };
-    };
-
-    /**
-     * Function to return result after select operation
-     * @param results
-     * @param success
-     */
-    setResults = (results, success=false) => {
-        console.log('Setting the results:', results);
-        this.results = results[0];
-        console.log('checking result:', results);
-        this.success = success;
     };
 }
 
