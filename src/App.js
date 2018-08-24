@@ -210,7 +210,7 @@ class App extends Component {
         }, () => {
             // Store the updated result
             let searchData = JSON.stringify(updatedHits);
-            this.db.insertData(searchKey, searchData, page);
+            this.db.updateSearchData(searchKey, searchData, page);
         });
     };
 

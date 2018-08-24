@@ -138,6 +138,29 @@ class Db {
             success: successTxt
         };
     };
+
+    /**
+     * Function to update the search_data by search_key
+     * @param searchKey
+     * @param newRecords
+     * @param page
+     * @returns {Promise<void>}
+     */
+    updateSearchData = async (searchKey, newRecords, page) => {
+        // Perform update operation
+        await this.connection.update({
+            in: this.searchTable,
+            set: {
+                data: newRecords,
+            },
+            where: {
+                param: searchKey,
+                page: page,
+            }
+        }).then((rowsUpdated) => {
+            console.log(rowsUpdated + ' rows updated!');
+        }).catch((err) => console.log('Error occurred while updating:', err));
+    };
 }
 
 export default Db;
