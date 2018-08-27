@@ -100,10 +100,22 @@ class App extends Component {
                 [searchKey] : { hits : updateHits, page },
             },
             isLoading: false
-        }, () => {
-            // Store the result and page limit in indexeddb by search key
-            let searchData = JSON.stringify(updateHits);
-            this.db.insertData(searchKey, searchData, page);
+        }, async () => {
+            let checkData = await this.db.getDataByKey(searchKey);
+            if (checkData.success) {
+                console.log('Update records!');
+                console.log('New records:', hits);
+                // Update the records
+                //let newData = JSON.stringify(hits);
+                for (let i=0; i < hits.length; i++) {
+                    this.db.updateSearchData(searchKey, JSON.stringify(hits[i]), page)
+                }
+            } else {
+                console.log('Adding new records');
+                // Store the result and page limit in indexeddb by search key
+                let searchData = JSON.stringify(updateHits);
+                this.db.insertData(searchKey, searchData, page);
+            }
         });
     };
 

@@ -152,10 +152,10 @@ class Db {
             in: this.searchTable,
             set: {
                 data: newRecords,
+                page: page,
             },
             where: {
                 param: searchKey,
-                page: page,
             }
         }).then((rowsUpdated) => {
             console.log(rowsUpdated + ' rows updated!');
