@@ -8,6 +8,8 @@ import SlideToggle from './components/SlideToggle/index';
 import Loading from './components/Loading';
 import api from './components/Api';
 import Db from './components/Db';
+import ErrorBoundary from './components/ErrorBoundary';
+import ErrorMessage from './components/ErrorMessage';
 
 /**
  * @class App
@@ -271,18 +273,18 @@ class App extends Component {
                     </Search>
                 </div>
                 {/*Applying Conditional Rendering in ternary operation for result*/}
-                { error
-                    ?<div className="interactions">
-                        <p>Oops, Something went wrong!</p>
-                    </div>
+                {error ?
+                        <ErrorMessage />
                     :
-                    <Table
-                        list={ list }
-                        sortKey = { sortKey }
-                        isSortReverse = { isSortReverse }
-                        onSort = { this.onSort }
-                        onDismiss = { this.onDismiss }
-                    />
+                        <ErrorBoundary>
+                            <Table
+                                list={ list }
+                                sortKey = { sortKey }
+                                isSortReverse = { isSortReverse }
+                                onSort = { this.onSort }
+                                onDismiss = { this.onDismiss }
+                            />
+                        </ErrorBoundary>
                 }
 
                 {/* More button to generate more result as a paginated data */}
