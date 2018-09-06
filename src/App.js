@@ -217,7 +217,14 @@ class App extends Component {
         }, () => {
             // Store the updated result
             let searchData = JSON.stringify(updatedHits);
+            let resultLength = results[searchKey]['hits'].length;
+
             this.db.updateSearchData(searchKey, searchData, page);
+
+            // Make api call when dataset is empty
+            if (resultLength <= 1) {
+                this.fetchSearchTopStories(searchKey);
+            }
         });
     };
 
