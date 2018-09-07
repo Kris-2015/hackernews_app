@@ -219,11 +219,12 @@ class App extends Component {
             let searchData = JSON.stringify(updatedHits);
             let resultLength = results[searchKey]['hits'].length;
 
+            // Update the indexeddb with latest changes
             this.db.updateSearchData(searchKey, searchData, page);
 
             // Make api call when dataset is empty
             if (resultLength <= 1) {
-                this.fetchSearchTopStories(searchKey);
+                this.fetchSearchTopStories(searchKey, (page+1));
             }
         });
     };
