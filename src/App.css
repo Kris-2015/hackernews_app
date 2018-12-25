@@ -1,6 +1,11 @@
 .page {
-  margin: 20px;
+    margin: 20px;
 }
 .interactions {
-  text-align: center;
+    text-align: center;
+}
+
+.card {
+    top: 60px !important;
+    left: 150px !important;
 }
