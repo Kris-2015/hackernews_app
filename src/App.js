@@ -20,6 +20,9 @@ class App extends Component {
                 <div className="row">
                     <div className="col-sm-8">
                         <div className="card">
+                            <div className="card-header">
+                                <h3>Document Management</h3>
+                            </div>
                             <div className="card-body">
                                 <form>
                                     <div className="form-group row">
@@ -55,6 +58,9 @@ class App extends Component {
                                         <div className="col-sm-8">
                                             <input type="file" className="form-control-file" id="upload-file" />
                                         </div>
+                                    </div>
+                                    <div className="form-group row">
+                                        <button type="button" class="submit-btn btn btn-primary">Submit</button>
                                     </div>
                                 </form>
                             </div>
